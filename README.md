@@ -12,7 +12,7 @@ pip install transformers torch
 
 1. The Datasets ([`datasets_glue.py`](datasets_glue.py) and [`datasets_lm.py`](datasets_lm.py)) are copy/paste of existing code.
 	- they are currently `torch.data.Dataset`s but we could plug @thomwolf's framework agnostic datasets there.
-1. The DataProcessors (in [`data_processor.py`](data_processor.py)): they possesses one or more `Dataset`s
+1. The DataProcessors (in [`data_processor.py`](data_processor.py)): they possess one or more `Dataset`s
     and are responsible for batching and pre-processing their samples
     when requested by the training loop.
 	Name is TBD, ideas are welcome.
@@ -21,7 +21,7 @@ pip install transformers torch
 	- DataProcessorForLM
 1. The [`trainer.py`](trainer.py) file contains:
 	- `TrainingArgs` (read the docstring there)
-	- the `Trainer` class
+	- the `Trainer` class (currently very partial, see docstring there.)
 1. Finally, two working example scripts: [`run_glue.py`](run_glue.py) and [`run_language_modeling.py`](run_language_modeling.py)
 
 
@@ -35,11 +35,11 @@ We do not want to have only lightning examples though, because
 
 My thoughts:
 
-- I was initially going to implement a `trainer.pl_train(**extra_pl_args)` on this `Trainer` prototype, that would have wrapper the model and its dataloader/etc. in a wrapper child of Pytorch-lightning and then just deferred to Lightning for everything.
+- I was initially going to implement a stub for a `trainer.pl_train(**extra_pl_args)` on this `Trainer` prototype, that would have wrapped the model and its dataloader/etc. in a wrapper child of Pytorch-lightning's LightningModule and then just deferred to Lightning for everything.
 - However, I'm now conflicted because:
-	- the Trainer does not do anything in that class (just proxy and wrap)
-	- it's using a slightly different API than lightning so it kind of obfuscates things for users of lightning. (If they're used to, and expect, the exact same method names etc. as encouraged by lightning)
-- So maybe we can just have two different sets of examples, and see what happens "in the wild". In all cases, both implementations will be way more compact, because the `DataProcessor`s, the `TrainingArgs` above (and of course the datasets) can be shared.
+	- the Trainer would not do anything in that case (just proxy and wrap), which is kinda deceptive.
+	- It would then expose a slightly different API than lightning so it kind of obfuscates things for users of lightning. (They are used to, and expect, the exact same method names etc. as encouraged by lightning)
+- So maybe we can just have two different sets of examples, and see what happens "in the wild". In all cases, both implementations will be way more compact, because most of the heavy lifting is going to be in the `DataProcessor`s and the `TrainingArgs` above (and of course the datasets) and would be shared.
 - **Thoughts?**
 
 

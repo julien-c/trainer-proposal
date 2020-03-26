@@ -44,6 +44,13 @@ class TrainingArgs:
 """
 Trainer class: basically just the extraction of the training/eval loop
 we have in example scripts today.
+
+Note: this is very partial and we would add:
+- gpu
+- multi-gpu
+- checkpointing
+- eval
+- mixed precision
 """
 
 
