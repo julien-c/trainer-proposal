@@ -5,6 +5,8 @@ A bottom-up, incremental refactor of the example scripts (the main ones at least
 
 **Timeline**: around ~2 weeks
 
+Also inspired by @srush's simple training document [here](https://docs.google.com/document/d/1WAR9uuOZpu7T_6TNPHrxIvrNbrUs7Ggy3WjjDwjayzA/edit#heading=h.tzvypnpe7axy) (Note: hf-internal)
+
 ## In which order to read the code in this proposal
 
 ```bash
