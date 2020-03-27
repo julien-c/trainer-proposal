@@ -65,14 +65,6 @@ class Trainer:
         self.args = args
         self.optimizer = Adam(self.model.parameters())
 
-    def collate(self, examples: List[torch.Tensor]):
-        """
-        Override in concrete subclass if necessary
-        """
-        if self.tokenizer._pad_token is None:
-            return pad_sequence(examples, batch_first=True)
-        return pad_sequence(examples, batch_first=True, padding_value=self.tokenizer.pad_token_id)
-
     def get_train_dataloader(self) -> DataLoader:
         return DataLoader(
             self.data_processor.train_dataset,
