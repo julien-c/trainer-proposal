@@ -14,13 +14,13 @@ from data_processor import DataProcessor
 
 
 """
-TrainingArgs would be the extraction of the argparse args we use in the example scripts today,
-and that relate to the training loop itself.
+TrainingArgs would be the extraction of the subset of the argparse args we use in the example scripts today,
+and which relate to the training loop itself.
 
 We would have a way to turn those args automatically into argparse arguments to be able to 
 specify them on the command line like today (I have a ten-liner class that does that).
 
-(No special magic or third-party library needed)
+(No special magic or third-party library needed!)
 """
 
 @dataclass
