@@ -1,9 +1,11 @@
 
 ## TL;DR
 
-A bottom-up refactor of (most of) the example scripts that will pave the way for more cool stuff to come in the future.
+A bottom-up, incremental refactor of the example scripts (the main ones at least) that will pave the way for more cool stuff to come in the future.
 
-## In which order to read this proposal
+**Timeline**: around ~2 weeks
+
+## In which order to read the code in this proposal
 
 ```bash
 # Clone the repo, then install torch and transformers
@@ -11,35 +13,31 @@ pip install transformers torch
 ```
 
 1. The Datasets ([`datasets_glue.py`](datasets_glue.py) and [`datasets_lm.py`](datasets_lm.py)) are copy/paste of existing code.
-	- they are currently `torch.data.Dataset`s but we could plug @thomwolf's framework agnostic datasets there.
-1. The DataProcessors (in [`data_processor.py`](data_processor.py)): they possess one or more `Dataset`s
+	- they are currently `torch.data.Dataset`s but we will plug @thomwolf's framework agnostic datasets there.
+1. The DataProcessors (in [`data_processor.py`](data_processor.py)) (name is T.B.D.): they possess one or more `Dataset`s
     and are responsible for batching and pre-processing their samples
     when requested by the training loop.
-	Name is TBD, ideas are welcome.
+	Name is TBD, name ideas are welcome.
 	In this proposal we have two of them:
 	- DataProcessorForSequenceClassification
 	- DataProcessorForLM
 1. The [`trainer.py`](trainer.py) file contains:
 	- `TrainingArgs` (read the docstring there)
 	- the `Trainer` class (currently very partial, see docstring there.)
-1. Finally, two working example scripts: [`run_glue.py`](run_glue.py) and [`run_language_modeling.py`](run_language_modeling.py)
+1. Finally, two working example scripts, to see the final "API" of a full training script: [`run_glue.py`](run_glue.py) and [`run_language_modeling.py`](run_language_modeling.py)
 
 
 ## How does this articulate with pytorch-lightning examples
 
-@srush has refactored a few examples into lightning and there seems to be a significant number of users who are using lightning/contributing other examples.
+@srush has refactored a few of the examples into lightning and there seems to be a fair number of users who are using lightning and contributing other examples.
 
-We do not want to have only lightning examples though, because
-- we support Tensorflow (so we would have the same API in a TFTrainer, or just support TF transparently, like in `Pipeline`s).
+We do not want to support only lightning examples though, because
+- we support Tensorflow (so we should have about the same API in a `TFTrainer`, or even just support TF transparently, like in `Pipeline`s).
 - Lightning might be overkill or opaque for very simple training loops.
+- It's ok to explore different approaches at the same time.
 
-My thoughts:
+**In all cases, this current proposal will also make the pytorch-lightning examples much cleaner and more compact**, because most of the heavy lifting is going to be in the `DataProcessor`s and the `TrainingArgs` above (and the datasets) and will be shared.
 
-- I was initially going to implement a stub for a `trainer.pl_train(**extra_pl_args)` on this `Trainer` prototype, that would have wrapped the model and its dataloader/etc. in a wrapper child of Pytorch-lightning's LightningModule and then just deferred to Lightning for everything.
-- However, I'm now conflicted because:
-	- the Trainer would not do anything in that case (just proxy and wrap), which is kinda deceptive.
-	- It would then expose a slightly different API than lightning so it kind of obfuscates things for users of lightning. (They are used to, and expect, the exact same method names etc. as encouraged by lightning)
-- So maybe we can just have two different sets of examples, and see what happens "in the wild". In all cases, both implementations will be way more compact, because most of the heavy lifting is going to be in the `DataProcessor`s and the `TrainingArgs` above (and of course the datasets) and would be shared.
-- **Thoughts?**
+## Thoughts?
 
 
